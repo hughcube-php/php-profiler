@@ -82,12 +82,15 @@ class Profiler
         return $this->profilingData;
     }
 
+    /**
+     * @throws \Random\RandomException
+     */
     public function isEnable($name, ...$args): bool
     {
         $enables = $this->config->get('enable', []);
         if (isset($enables[$name])) {
             $callable = $enables[$name];
-        } elseif ($enables['default']) {
+        } elseif (isset($enables['default'])) {
             $callable = $enables['default'];
         } else {
             $callable = function () {

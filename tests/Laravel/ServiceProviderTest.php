@@ -16,6 +16,6 @@ class ServiceProviderTest extends TestCase
 {
     public function testRegister()
     {
-        $this->assertInstanceOf(Profiler::class, HProfiler::getProfiler());
+        $this->assertInstanceOf(Profiler::class, HProfiler::getRootProfiler());
     }
 }
