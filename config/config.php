@@ -17,14 +17,11 @@ return [
         RequestOptions::CONNECT_TIMEOUT => 3.0,
         RequestOptions::READ_TIMEOUT => 3.0,
         RequestOptions::HTTP_ERRORS => false,
-        RequestOptions::PROXY => [
-            'http' => '127.0.0.1:8888',
-            'https' => '127.0.0.1:8888',
-        ],
+        RequestOptions::PROXY => env('PROFILER_HTTP_PROXY'),
         RequestOptions::HEADERS => [
             'User-Agent' => null,
-            'Authentication' => env('XHPROF_AUTHENTICATION'),
-            'X-Fc-Invocation-Type' => env('XHPROF_INVOCATION_TYPE', 'Async'),
+            'Authentication' => env('PROFILER_AUTHENTICATION'),
+            'X-Fc-Invocation-Type' => env('PROFILER_INVOCATION_TYPE', 'Async'),
         ],
         RequestOptions::VERIFY => false,
     ],
@@ -41,6 +38,7 @@ return [
     'profiler.exclude-query' => [],
     'profiler.exclude-server' => [],
 
+    'enable.probability' => 10,
     'enable' => [
         'default' => 'class'
     ]

@@ -65,7 +65,7 @@ class ProfilingData
         $result = [];
 
         foreach ($values as $name => $value) {
-            if (in_array(strtolower($name), $excludeKeys)) {
+            if (!in_array(strtolower($name), $excludeKeys)) {
                 $result[$name] = $value;
             }
         }

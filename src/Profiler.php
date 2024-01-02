@@ -84,14 +84,18 @@ class Profiler
 
     public function isEnable($name, ...$args): bool
     {
-        $callable = $this->config->get('enable', [])[$name] ?? null ?: null;
-        $callable = $callable ?? $this->config->get('enable', [])['default'] ?? null ?: null;
-
-        if (is_callable($callable)) {
-            return call_user_func_array($callable, $args);
+        $enables = $this->config->get('enable', []);
+        if (isset($enables[$name])) {
+            $callable = $enables[$name];
+        } elseif ($enables['default']) {
+            $callable = $enables['default'];
+        } else {
+            $callable = function () {
+                return random_int(0, 1000000) < $this->config->get('enable.probability', 0);
+            };
         }
 
-        return false;
+        return call_user_func_array($callable, $args);
     }
 
     /**

@@ -24,6 +24,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         /** @var Repository $config */
         $config = $this->app->make('config');
 
-        HProfiler::setRootProfiler(new Profiler($config->get('xhprof')));
+        HProfiler::setRootProfiler(new Profiler($config->get('profiler')));
     }
 }
