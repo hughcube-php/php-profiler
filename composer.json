@@ -11,7 +11,6 @@
   "require": {
     "php": ">=7.0",
     "ext-json": "*",
-    "ext-xhprof": "*",
     "hughcube/purl": "*",
     "hughcube/guzzle-http": "*",
     "illuminate/collections": "*"
