@@ -130,7 +130,7 @@ class Profiler
         }
 
         try {
-            $data = $this->getProfilingData()->format(
+            return $this->save(
                 $this->startedAt,
                 $this->getProfiler()->disable(),
                 $url,
@@ -138,9 +138,31 @@ class Profiler
                 $server,
                 ($env ?? $_ENV)
             );
-            return $this->getSaver()->save($data);
         } finally {
             $this->startedAt = null;
         }
+    }
+
+    /**
+     * @return null|SaveResult
+     */
+    public function save(
+        string $startedAt,
+        array $profile,
+        string $url = '',
+        array $query = [],
+        array $server = [],
+        array $env = null
+    ) {
+
+        $data = $this->getProfilingData()->format(
+            $startedAt,
+            $profile,
+            $url,
+            $query,
+            $server,
+            ($env ?? $_ENV)
+        );
+        return $this->getSaver()->save($data);
     }
 }

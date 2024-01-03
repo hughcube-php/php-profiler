@@ -15,6 +15,7 @@ use HughCube\Profiler\Saver\SaveResult;
  * @method static bool isEnable($name, ...$args)
  * @method static Profiler start($flags = null, $options = null)
  * @method static null|SaveResult stop($url = '', array $query = [], array $server = [], array $env = null)
+ * @method static SaveResult save(string $startedAt, array $profile, string $url = '', array $query = [], array $server = [], array $env = null)
  */
 class HProfiler
 {
@@ -31,9 +32,11 @@ class HProfiler
         return self::$rootProfiler;
     }
 
-    public static function setRootProfiler(Profiler $profiler)
+    public static function setRootProfiler(Profiler $profiler, bool $overwrite = false)
     {
-        self::$rootProfiler = $profiler;
+        if ($overwrite || null === self::$rootProfiler) {
+            self::$rootProfiler = $profiler;
+        }
     }
 
     public static function __callStatic($name, $arguments)
