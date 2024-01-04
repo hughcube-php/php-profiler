@@ -11,18 +11,16 @@ namespace HughCube\Profiler\Laravel;
 use HughCube\Profiler\HProfiler;
 use HughCube\Profiler\Profiler;
 use Illuminate\Config\Repository;
-use Illuminate\Contracts\Container\BindingResolutionException;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
     /**
      * Register the provider.
-     * @throws BindingResolutionException
      */
     public function register()
     {
         /** @var Repository $config */
-        $config = $this->app->make('config');
+        $config = $this->app['config'];
 
         HProfiler::setRootProfiler(new Profiler($config->get('profiler')));
     }
