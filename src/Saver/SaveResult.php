@@ -54,4 +54,9 @@ class SaveResult
     {
         call_user_func($this->awaitCallable, $this->getResult());
     }
+
+    public function __destruct()
+    {
+        $this->await();
+    }
 }
