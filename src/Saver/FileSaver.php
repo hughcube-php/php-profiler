@@ -2,31 +2,34 @@
 
 namespace HughCube\Profiler\Saver;
 
-class FileSaver extends AbstractSaver
-{
-    /**
-     * @var string
-     */
-    protected $file;
+use Illuminate\Support\Facades\File;
 
+class FileSaver extends AbstractSaver implements SaverInterface
+{
     /**
      * @var null|false|int
      */
     protected $result = null;
 
-    public function __construct($file)
+    public function getFile(): ?string
     {
-        $this->file = $file;
+        return $this->config['file'] ?? null;
     }
 
     public function isSupported(): bool
     {
-        if (is_file($this->file)) {
-            return is_writable($this->file);
+        $file = $this->getFile();
+
+        if (empty($file)) {
+            return false;
         }
 
-        if (!file_exists($this->file)) {
-            return is_writable(dirname($this->file));
+        if (is_file($file)) {
+            return is_writable($file);
+        }
+
+        if (!file_exists($file)) {
+            return is_writable(dirname($file));
         }
 
         return false;
@@ -34,8 +37,11 @@ class FileSaver extends AbstractSaver
 
     public function save(array $data): SaveResult
     {
+        $file = $this->getFile();
+        File::ensureDirectoryExists(dirname($file));
+
         return new SaveResult(
-            file_put_contents($this->file, json_encode($data).PHP_EOL, FILE_APPEND),
+            file_put_contents($file, json_encode($data).PHP_EOL, FILE_APPEND),
 
             function ($result) {
             },

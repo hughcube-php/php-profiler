@@ -2,11 +2,7 @@
 
 namespace HughCube\Profiler;
 
-use HughCube\GuzzleHttp\Client;
-use HughCube\Profiler\Config;
 use HughCube\Profiler\Exception\ProfilerException;
-use HughCube\Profiler\Profiler;
-use HughCube\Profiler\Saver;
 use HughCube\Profiler\Saver\SaverInterface;
 
 /**
@@ -18,13 +14,11 @@ class SaverFactory
     {
         $adapters = [
             Profiler::SAVER_FILE => function (Config $config) {
-                $config = $config->get('save.handler.file', []);
-                return new Saver\FileSaver($config['file'] ?? null);
+                return new Saver\FileSaver($config->get('save.handler.file', []));
             },
 
             Profiler::SAVER_UPLOAD => function (Config $config) {
-                $client = new Client($config->get('save.handler.upload', []));
-                return new Saver\UploadSaver($client);
+                return new Saver\UploadSaver($config->get('save.handler.upload', []));
             },
         ];
 
