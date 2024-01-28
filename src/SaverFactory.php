@@ -20,6 +20,10 @@ class SaverFactory
             Profiler::SAVER_UPLOAD => function (Config $config) {
                 return new Saver\UploadSaver($config->get('save.handler.upload', []));
             },
+
+            Profiler::SAVER_CALLABLE => function (Config $config) {
+                return new Saver\CallableSaver($config->get('save.handler.callable', []));
+            },
         ];
 
         if ($config->offsetExists('save.handler')) {

@@ -10,6 +10,7 @@ class Profiler
 {
     const SAVER_FILE = 'file';
     const SAVER_UPLOAD = 'upload';
+    const SAVER_CALLABLE = 'callable';
 
     const PROFILER_XHPROF = 'xhprof';
 
@@ -52,7 +53,7 @@ class Profiler
         }
     }
 
-    private function getProfiler()
+    private function getProfiler(): ?ProfilerInterface
     {
         if (null === $this->profiler) {
             $this->profiler = ProfilerFactory::create($this->config);
@@ -60,10 +61,7 @@ class Profiler
         return $this->profiler;
     }
 
-    /**
-     * @return SaverInterface
-     */
-    private function getSaver()
+    private function getSaver(): ?SaverInterface
     {
         if (null === $this->saver) {
             $this->saver = SaverFactory::create($this->config);
@@ -71,10 +69,7 @@ class Profiler
         return $this->saver;
     }
 
-    /**
-     * @return ProfilingData
-     */
-    private function getProfilingData()
+    private function getProfilingData(): ?ProfilingData
     {
         if (null === $this->profilingData) {
             $this->profilingData = new ProfilingData($this->config);
@@ -101,9 +96,6 @@ class Profiler
         return call_user_func_array($callable, $args);
     }
 
-    /**
-     * @return $this
-     */
     public function start($flags = null, $options = null): Profiler
     {
         if (null !== $this->startedAt) {
@@ -120,10 +112,7 @@ class Profiler
         return $this;
     }
 
-    /**
-     * @return null|SaveResult
-     */
-    public function stop($url = '', array $query = [], array $server = [], array $env = null)
+    public function stop($url = '', array $query = [], array $server = [], array $env = null): ?SaveResult
     {
         if (null === $this->startedAt) {
             return null;
@@ -143,9 +132,6 @@ class Profiler
         }
     }
 
-    /**
-     * @return null|SaveResult
-     */
     public function save(
         string $startedAt,
         array $profile,
@@ -153,7 +139,7 @@ class Profiler
         array $query = [],
         array $server = [],
         array $env = null
-    ) {
+    ): ?SaveResult {
 
         $data = $this->getProfilingData()->format(
             $startedAt,
