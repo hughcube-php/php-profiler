@@ -64,12 +64,18 @@ class Middleware
     {
         $host = $request->getHost();
 
-        if (!empty($host) && false === filter_var($host, FILTER_VALIDATE_IP)) {
+        if (!empty($host)
+            && false === filter_var($host, FILTER_VALIDATE_IP)
+            && !in_array($host, ['localhost', '127.0.0.1'], true)
+        ) {
             return $host;
         }
 
         $appUrl = PUrl::parse(config('app.url'));
-        if ($appUrl instanceof PUrl && !$appUrl->matchHost('localhost') && !$appUrl->matchHost('127.0.0.1')) {
+        if ($appUrl instanceof PUrl
+            && !$appUrl->matchHost('localhost')
+            && !$appUrl->matchHost('127.0.0.1')
+        ) {
             return $appUrl->getHost();
         }
 
