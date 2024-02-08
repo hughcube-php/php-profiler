@@ -29,7 +29,7 @@ class CallableSaver extends AbstractSaver implements SaverInterface
         return new SaveResult(
             $callable($data),
             function ($result) {
-                return is_callable($result) ? $result : null;
+                return is_callable($result) ? $result() : null;
             },
             function ($result) {
                 return true;
