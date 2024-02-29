@@ -13,6 +13,7 @@
     "ext-json": "*",
     "hughcube/purl": "*",
     "hughcube/guzzle-http": "*",
+    "illuminate/support": "*",
     "illuminate/collections": "*"
   },
   "require-dev": {

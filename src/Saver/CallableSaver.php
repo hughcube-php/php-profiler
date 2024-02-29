@@ -2,6 +2,8 @@
 
 namespace HughCube\Profiler\Saver;
 
+use Illuminate\Support\Str;
+
 class CallableSaver extends AbstractSaver implements SaverInterface
 {
     /**
@@ -24,7 +26,7 @@ class CallableSaver extends AbstractSaver implements SaverInterface
 
     public function save(array $data): SaveResult
     {
-        $callable = $this->config['callable'];
+        $callable = $this->parseCallback($this->config['callable']);
 
         return new SaveResult(
             $callable($data),
@@ -35,5 +37,10 @@ class CallableSaver extends AbstractSaver implements SaverInterface
                 return true;
             }
         );
+    }
+
+    public static function parseCallback($callback, $default = null)
+    {
+        return is_callable($callback) ? $callback : Str::parseCallback($callback, $default);
     }
 }
