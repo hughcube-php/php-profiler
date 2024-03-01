@@ -24,6 +24,10 @@ class SaverFactory
             Profiler::SAVER_CALLABLE => function (Config $config) {
                 return new Saver\CallableSaver($config->get('save.handler.callable', []));
             },
+
+            Profiler::SAVER_LARAVEL => function (Config $config) {
+                return new Saver\LaravelSaver($config->get('save.handler.laravel', []));
+            },
         ];
 
         if ($config->offsetExists('save.handler')) {

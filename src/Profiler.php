@@ -11,6 +11,7 @@ class Profiler
     const SAVER_FILE = 'file';
     const SAVER_UPLOAD = 'upload';
     const SAVER_CALLABLE = 'callable';
+    const SAVER_LARAVEL = 'laravel';
 
     const PROFILER_XHPROF = 'xhprof';
 
@@ -149,6 +150,7 @@ class Profiler
             $server,
             ($env ?? $_ENV)
         );
+
         return $this->getSaver()->save($data);
     }
 }
