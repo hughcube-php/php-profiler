@@ -54,7 +54,7 @@ class Profiler
         }
     }
 
-    private function getProfiler(): ?ProfilerInterface
+    private function getProfiler(): ProfilerInterface
     {
         if (null === $this->profiler) {
             $this->profiler = ProfilerFactory::create($this->config);
@@ -62,7 +62,7 @@ class Profiler
         return $this->profiler;
     }
 
-    private function getSaver(): ?SaverInterface
+    private function getSaver(): SaverInterface
     {
         if (null === $this->saver) {
             $this->saver = SaverFactory::create($this->config);
@@ -70,7 +70,7 @@ class Profiler
         return $this->saver;
     }
 
-    private function getProfilingData(): ?ProfilingData
+    private function getProfilingData(): ProfilingData
     {
         if (null === $this->profilingData) {
             $this->profilingData = new ProfilingData($this->config);
