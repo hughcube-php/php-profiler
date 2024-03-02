@@ -90,7 +90,7 @@ class Profiler
             $callable = $enables['default'];
         } else {
             $callable = function () {
-                return random_int(0, 1000000) <= $this->config->get('enable.probability', 0);
+                return random_int(0, 1000000) < $this->config->get('enable.probability', 0);
             };
         }
 
