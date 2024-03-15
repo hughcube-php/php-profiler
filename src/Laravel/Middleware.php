@@ -44,13 +44,7 @@ class Middleware
             )
         );
 
-        /**
-         * Because the saved operation may be asynchronous,
-         * you need to wait for the request to complete before releasing the resource
-         */
-        register_shutdown_function(function () use ($saveResult) {
-            $saveResult->await();
-        });
+        $saveResult->await();
 
         return $response;
     }
