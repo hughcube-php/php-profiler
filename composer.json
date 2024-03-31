@@ -12,9 +12,7 @@
     "php": ">=7.1",
     "ext-json": "*",
     "hughcube/purl": "*",
-    "hughcube/guzzle-http": "*",
-    "illuminate/support": "*",
-    "illuminate/collections": "*"
+    "hughcube/guzzle-http": "*"
   },
   "require-dev": {
     "laravel/framework": "*",
