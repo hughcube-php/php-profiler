@@ -24,6 +24,11 @@ class HProfiler
      */
     private static $rootProfiler = null;
 
+    public static function hasRootProfiler(): bool
+    {
+        return self::$rootProfiler instanceof Profiler;
+    }
+
     public static function getRootProfiler(): Profiler
     {
         if (!self::$rootProfiler instanceof Profiler) {
