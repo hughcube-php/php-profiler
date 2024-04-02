@@ -40,6 +40,6 @@ return [
 
     'enable.probability' => 10,
     'enable' => [
-        'default' => 'class'
+        'default' => true
     ]
 ];

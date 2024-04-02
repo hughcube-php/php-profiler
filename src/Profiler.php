@@ -50,7 +50,7 @@ class Profiler
         if ($config instanceof Config) {
             $this->config = $config;
         } else {
-            $this->config = new Config($config);
+            $this->config = new Config($config ?? []);
         }
     }
 
@@ -92,6 +92,10 @@ class Profiler
             $callable = function () {
                 return random_int(0, 1000000) < $this->config->get('enable.probability', 0);
             };
+        }
+
+        if (is_bool($callable)) {
+            return $callable;
         }
 
         return call_user_func_array($callable, $args);

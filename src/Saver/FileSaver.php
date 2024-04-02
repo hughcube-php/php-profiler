@@ -2,8 +2,6 @@
 
 namespace HughCube\Profiler\Saver;
 
-use Illuminate\Support\Facades\File;
-
 class FileSaver extends AbstractSaver implements SaverInterface
 {
     /**
@@ -38,7 +36,10 @@ class FileSaver extends AbstractSaver implements SaverInterface
     public function save(array $data): SaveResult
     {
         $file = $this->getFile();
-        File::ensureDirectoryExists(dirname($file));
+
+        if (!file_exists(dirname($file))) {
+            mkdir(dirname($file), 0755, true);
+        }
 
         return new SaveResult(
             file_put_contents($file, json_encode($data).PHP_EOL, FILE_APPEND),
