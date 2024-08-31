@@ -14,6 +14,7 @@ use HughCube\Profiler\HProfiler;
 use HughCube\Profiler\Profiler;
 use HughCube\PUrl\Url as PUrl;
 use Illuminate\Http\Request;
+use Random\RandomException;
 
 class Middleware
 {
@@ -27,7 +28,7 @@ class Middleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!$this->getProfiler()->isEnable('http.middleware', $request)) {
+        if (!$this->isEnable($request)) {
             return $next($request);
         }
 
@@ -47,6 +48,14 @@ class Middleware
         $saveResult->await();
 
         return $response;
+    }
+
+    /**
+     * @throws RandomException
+     */
+    protected function isEnable($request): bool
+    {
+        return $this->getProfiler()->isEnable('http.middleware', $request);
     }
 
     protected function getProfiler(): Profiler
