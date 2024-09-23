@@ -53,7 +53,7 @@ class Config implements ArrayAccess
      */
     public function get($key, $default = null)
     {
-        if (is_null($key)) {
+        if (null === $key) {
             return $this->items;
         }
 
