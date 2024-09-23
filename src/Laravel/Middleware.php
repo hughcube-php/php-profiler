@@ -27,7 +27,7 @@ class Middleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!$this->getProfiler()->isEnable('http.middleware', $request)) {
+        if (!$this->isEnable($request)) {
             return $next($request);
         }
 
@@ -47,6 +47,14 @@ class Middleware
         $saveResult->await();
 
         return $response;
+    }
+
+    /**
+     * @throws \Random\RandomException
+     */
+    protected function isEnable(Request $request): bool
+    {
+        return $this->getProfiler()->isEnable('http.middleware', $request);
     }
 
     protected function getProfiler(): Profiler
