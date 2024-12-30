@@ -117,7 +117,7 @@ class Profiler
         return $this;
     }
 
-    public function stop($url = '', array $query = [], array $server = [], array $env = null): ?SaveResult
+    public function stop($url = '', array $query = [], array $server = [], ?array $env = null): ?SaveResult
     {
         if (null === $this->startedAt) {
             return null;
@@ -137,15 +137,8 @@ class Profiler
         }
     }
 
-    public function save(
-        string $startedAt,
-        array $profile,
-        string $url = '',
-        array $query = [],
-        array $server = [],
-        array $env = null
-    ): ?SaveResult {
-
+    public function save(string $startedAt, array $profile, string $url = '', array $query = [], array $server = [], ?array $env = null): ?SaveResult
+    {
         $data = $this->getProfilingData()->format(
             $startedAt,
             $profile,

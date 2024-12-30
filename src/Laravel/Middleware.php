@@ -38,10 +38,7 @@ class Middleware
         $saveResult = $this->getProfiler()->stop(
             ($request->getPathInfo() ?: '/'),
             $request->query->all(),
-            array_merge(
-                $request->server->all(),
-                array_filter(['SERVER_NAME' => $this->getServerName($request)])
-            )
+            array_merge($request->server->all(), array_filter(['SERVER_NAME' => $this->getServerName($request)]))
         );
 
         $saveResult->await();
