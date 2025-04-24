@@ -12,7 +12,6 @@ use Closure;
 use Exception;
 use HughCube\Profiler\HProfiler;
 use HughCube\Profiler\Profiler;
-use HughCube\PUrl\Url as PUrl;
 use Illuminate\Http\Request;
 
 class Middleware
@@ -61,23 +60,22 @@ class Middleware
 
     protected function getServerName(Request $request): ?string
     {
-        $host = $request->getHost();
+        $requestHost = $request->getHost();
 
-        if (!empty($host)
-            && false === filter_var($host, FILTER_VALIDATE_IP)
-            && !in_array($host, ['localhost', '127.0.0.1'], true)
+        if (!empty($requestHost)
+            && false === filter_var($requestHost, FILTER_VALIDATE_IP)
+            && !in_array($requestHost, ['localhost', '127.0.0.1'], true)
         ) {
-            return $host;
+            return $requestHost;
         }
 
-        $appUrl = PUrl::parse(config('app.url'));
-        if ($appUrl instanceof PUrl
-            && !$appUrl->matchHost('localhost')
-            && !$appUrl->matchHost('127.0.0.1')
-        ) {
-            return $appUrl->getHost();
+        if (false !== filter_var($appUrl = config('app.url'), FILTER_VALIDATE_URL)) {
+            $appUrlHost = parse_url($appUrl, PHP_URL_HOST);
+            if (!empty($appUrlHost) && !in_array($requestHost, ['localhost', '127.0.0.1'], true)) {
+                return $appUrlHost;
+            }
         }
 
-        return null;
+        return $requestHost ?: null;
     }
 }
