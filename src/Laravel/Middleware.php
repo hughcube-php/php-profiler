@@ -51,7 +51,8 @@ class Middleware
      */
     protected function isEnable(Request $request): bool
     {
-        return $this->getProfiler()->isEnable('http.middleware', $request);
+        return $this->getProfiler()->isEnable('http.middleware', $request)
+            || '1' === $request->input('hughcube_enable_profiler');
     }
 
     protected function getProfiler(): Profiler
