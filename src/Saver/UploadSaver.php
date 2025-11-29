@@ -7,6 +7,7 @@ use GuzzleHttp\RequestOptions;
 use HughCube\GuzzleHttp\Client;
 use HughCube\GuzzleHttp\HttpClientTrait;
 use HughCube\GuzzleHttp\LazyResponse;
+use HughCube\Profiler\Contracts\HandlerStackProviderInterface;
 use Psr\Http\Message\RequestInterface;
 
 class UploadSaver extends AbstractSaver implements SaverInterface
@@ -38,7 +39,39 @@ class UploadSaver extends AbstractSaver implements SaverInterface
             };
         });
 
+        /** 应用自定义 HandlerStack 提供者 */
+        $this->applyHandlerStackProviders($handler);
+
         return new Client($config);
+    }
+
+    /**
+     * 应用配置的 HandlerStack 提供者
+     *
+     * @param HandlerStack $handlerStack
+     * @return void
+     */
+    protected function applyHandlerStackProviders(HandlerStack $handlerStack): void
+    {
+        $providers = $this->config['middlewares'] ?? [];
+
+        if (empty($providers)) {
+            return;
+        }
+
+        $providers = is_array($providers) ? $providers : [$providers];
+
+        foreach ($providers as $provider) {
+            if (is_string($provider)) {
+                $provider = new $provider();
+            }
+
+            if (is_callable($provider)) {
+                call_user_func($provider, $handlerStack);
+            } elseif ($provider instanceof HandlerStackProviderInterface) {
+                $provider->push($handlerStack);
+            }
+        }
     }
 
     public function isSupported(): bool
