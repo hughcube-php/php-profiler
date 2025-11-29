@@ -8,10 +8,14 @@ use HughCube\Profiler\Contracts\HandlerStackProviderInterface;
 use Psr\Http\Message\RequestInterface;
 
 /**
- * Content-Encoding Gzip 压缩中间件
+ * 请求体 Gzip 压缩中间件
  *
- * 使用标准 HTTP Content-Encoding: gzip 头进行压缩
- * 服务器端会自动解压,无需额外处理
+ * 使用标准 Content-Encoding: gzip 头压缩请求体
+ *
+ * 虽然请求体压缩不如响应压缩常见,但符合 HTTP 标准
+ * 服务器端需要支持 gzip 解压缩才能正常工作
+ *
+ * 实际应用案例: Python Requests, Java Spring, OpenTelemetry 等
  */
 class ContentEncodingGzipMiddleware implements HandlerStackProviderInterface
 {
@@ -72,7 +76,7 @@ class ContentEncodingGzipMiddleware implements HandlerStackProviderInterface
                 $request = $request
                     ->withBody(Utils::streamFor($compressed))
                     ->withHeader('Content-Encoding', 'gzip')
-                    ->withoutHeader('Content-Length');
+                    ->withHeader('Content-Length', strlen($compressed));
 
                 return $handler($request, $options);
             };
