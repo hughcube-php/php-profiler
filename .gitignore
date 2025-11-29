@@ -9,3 +9,5 @@ composer.lock
 .phpunit.result.cache
 phpunit.xml.dist
 .phpunit.cache
+benchmark-compression.php
+.claude/
