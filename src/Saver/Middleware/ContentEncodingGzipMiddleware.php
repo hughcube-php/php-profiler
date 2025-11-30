@@ -37,7 +37,7 @@ class ContentEncodingGzipMiddleware implements HandlerStackProviderInterface
      * @param int $threshold 压缩阈值(字节),默认 1KB
      * @param int $level 压缩级别(1-9),默认 6
      */
-    public function __construct(int $threshold = 1024, int $level = 6)
+    public function __construct(int $threshold = 1024, int $level = 1)
     {
         $this->threshold = $threshold;
         $this->level = max(1, min(9, $level));
@@ -66,9 +66,10 @@ class ContentEncodingGzipMiddleware implements HandlerStackProviderInterface
 
                 $body->rewind();
                 $contents = $body->getContents();
+                $originalLength = strlen($contents);
                 $compressed = gzencode($contents, $this->level);
 
-                if (false === $compressed || strlen($compressed) >= strlen($contents)) {
+                if (false === $compressed || strlen($compressed) >= $originalLength) {
                     $body->rewind();
                     return $handler($request, $options);
                 }
@@ -77,6 +78,7 @@ class ContentEncodingGzipMiddleware implements HandlerStackProviderInterface
                     ->withoutHeader('Content-Type')
                     ->withBody(Utils::streamFor($compressed))
                     ->withHeader('X-Content-Encoding', 'gzip')
+                    ->withHeader('X-Original-Content-Length', $originalLength)
                     ->withHeader('Content-Length', strlen($compressed));
 
                 return $handler($request, $options);
